@@ -36,7 +36,7 @@ public class Model {
     private Context context;
 
     // TODO optional: give your gestures more informative names
-    public String[] outputClasses = {"Gesture1", "Gesture2", "Gesture3"};
+    public String[] outputClasses = {"RollLeft", "Circle", "SlideUpDown"};
 
     public Model(Context context) {
         this.context = context;
@@ -45,9 +45,67 @@ public class Model {
         // Specify the features
         featureNames = new TreeMap<>();
         // TODO optional: create more features with more informative names
-        featureNames.put("Feature1", "numeric");
-        featureNames.put("Feature2", "numeric");
-        featureNames.put("Feature3", "numeric");
+        featureNames.put("Ax_Mean", "numeric");
+        featureNames.put("Ax_Min", "numeric");
+        featureNames.put("Ax_Max", "numeric");
+        featureNames.put("Ax_Variance", "numeric");
+        featureNames.put("Ax_Kurtosis", "numeric");
+        featureNames.put("Ax_EnergyMean", "numeric");
+        featureNames.put("Ax_Skewness", "numeric");
+
+        featureNames.put("Ay_Mean", "numeric");
+        featureNames.put("Ay_Min", "numeric");
+        featureNames.put("Ay_Max", "numeric");
+        featureNames.put("Ay_Variance","numeric");
+        featureNames.put("Ay_Kurtosis", "numeric");
+        featureNames.put("Ay_EnergyMean", "numeric");
+        featureNames.put("Ay_Skewness", "numeric");
+
+        featureNames.put("Az_Mean", "numeric");
+        featureNames.put("Az_Min", "numeric");
+        featureNames.put("Az_Max", "numeric");
+        featureNames.put("Az_Variance","numeric");
+        featureNames.put("Az_Kurtosis", "numeric");
+        featureNames.put("Az_EnergyMean", "numeric");
+        featureNames.put("Az_Skewness", "numeric");
+
+        featureNames.put("Gx_Mean", "numeric");
+        featureNames.put("Gx_Min", "numeric");
+        featureNames.put("Gx_Max", "numeric");
+        featureNames.put("Gx_Variance","numeric");
+        featureNames.put("Gx_Kurtosis", "numeric");
+        featureNames.put("Gx_EnergyMean", "numeric");
+        featureNames.put("Gx_Skewness", "numeric");
+
+        featureNames.put("Gy_Mean", "numeric");
+        featureNames.put("Gy_Min", "numeric");
+        featureNames.put("Gy_Max", "numeric");
+        featureNames.put("Gy_Variance","numeric");
+        featureNames.put("Gy_Kurtosis", "numeric");
+        featureNames.put("Gy_EnergyMean", "numeric");
+        featureNames.put("Gy_Skewness", "numeric");
+
+        featureNames.put("Gz_Mean", "numeric");
+        featureNames.put("Gz_Min", "numeric");
+        featureNames.put("Gz_Max", "numeric");
+        featureNames.put("Gz_Variance","numeric");
+        featureNames.put("Gz_Kurtosis", "numeric");
+        featureNames.put("Gz_EnergyMean", "numeric");
+        featureNames.put("Gz_Skewness", "numeric");
+    }
+
+    public double GetEnergyMean(DescriptiveStatistics data) {
+
+        double temp[] = data.getValues();
+
+        // get abs value
+        for (int i = 0; i < temp.length; i++)
+        {
+            temp[i] = Math.abs(temp[i]);
+        }
+
+        DescriptiveStatistics val = new DescriptiveStatistics(temp);
+        return val.getMean();
     }
 
     /**
@@ -67,12 +125,57 @@ public class Model {
                              DescriptiveStatistics gtime, DescriptiveStatistics gx, DescriptiveStatistics gy, DescriptiveStatistics gz,
                              String outputLabel, boolean isTraining) {
         Double[] data = new Double[featureNames.keySet().size()];
+        int wIndex = 0;
 
         // Compute features
         // TODO: replace these placeholders with real calculations involving ax, ay, etc.
-        data[0] = 0.0;
-        data[1] = 0.0;
-        data[2] = 4.0;
+        data[wIndex++] = ax.getGeometricMean();
+        data[wIndex++] = ax.getMax();
+        data[wIndex++] = ax.getMin();
+        data[wIndex++] = ax.getVariance();
+        data[wIndex++] = ax.getKurtosis();
+        data[wIndex++] = GetEnergyMean(ax);
+        data[wIndex++] = ax.getSkewness();
+
+        data[wIndex++] = ay.getGeometricMean();
+        data[wIndex++] = ay.getMax();
+        data[wIndex++] = ay.getMin();
+        data[wIndex++] = ay.getVariance();
+        data[wIndex++] = ay.getKurtosis();
+        data[wIndex++] = GetEnergyMean(ay);
+        data[wIndex++] = ay.getSkewness();
+
+        data[wIndex++] = az.getGeometricMean();
+        data[wIndex++] = az.getMax();
+        data[wIndex++] = az.getMin();
+        data[wIndex++] = az.getVariance();
+        data[wIndex++] = az.getKurtosis();
+        data[wIndex++] = GetEnergyMean(az);
+        data[wIndex++] = az.getSkewness();
+
+        data[wIndex++] = gx.getGeometricMean();
+        data[wIndex++] = gx.getMax();
+        data[wIndex++] = gx.getMin();
+        data[wIndex++] = gx.getVariance();
+        data[wIndex++] = gx.getKurtosis();
+        data[wIndex++] = GetEnergyMean(gx);
+        data[wIndex++] = gx.getSkewness();
+
+        data[wIndex++] = gy.getGeometricMean();
+        data[wIndex++] = gy.getMax();
+        data[wIndex++] = gy.getMin();
+        data[wIndex++] = gy.getVariance();
+        data[wIndex++] = gy.getKurtosis();
+        data[wIndex++] = GetEnergyMean(gy);
+        data[wIndex++] = gy.getSkewness();
+
+        data[wIndex++] = gz.getGeometricMean();
+        data[wIndex++] = gz.getMax();
+        data[wIndex++] = gz.getMin();
+        data[wIndex++] = gz.getVariance();
+        data[wIndex++] = gz.getKurtosis();
+        data[wIndex++] = GetEnergyMean(gz);
+        data[wIndex++] = gz.getSkewness();
 
         // Convert the feature vector to Strings
         String[] stringData = new String[featureNames.keySet().size()];

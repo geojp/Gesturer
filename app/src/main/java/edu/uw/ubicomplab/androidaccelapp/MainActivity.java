@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private boolean isRecording;
     private DescriptiveStatistics accelTime, accelX, accelY, accelZ;
     private DescriptiveStatistics gyroTime, gyroX, gyroY, gyroZ;
-    private static final int GESTURE_DURATION_SECS = 1;
+    private static final int GESTURE_DURATION_MS = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +170,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void recordGesture(View v) {
         final View v2 = v;
 
+        resultText.setText("Result: ");
+
         // Create the timer to start data collection
         Timer startTimer = new Timer();
         TimerTask startTask = new TimerTask() {
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Start the timers
         startTimer.schedule(startTask, 0);
-        endTimer.schedule(endTask, GESTURE_DURATION_SECS*1000);
+        endTimer.schedule(endTask, GESTURE_DURATION_MS);
     }
 
     /**
